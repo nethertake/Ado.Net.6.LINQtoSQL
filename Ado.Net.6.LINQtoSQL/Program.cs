@@ -17,7 +17,7 @@ namespace Ado.Net._6.LINQtoSQL
 
         static void Main(string[] args)
         {
-            Exmpl08();
+            Exmpl09();
 
 
 
@@ -135,7 +135,21 @@ namespace Ado.Net._6.LINQtoSQL
 
                 db.Refresh(RefreshMode.OverwriteCurrentValues, accessUsers);
                 Console.WriteLine("dCreated: {0}", aUser.dCreated);
+          
             }
         }
+
+
+        static void Exmpl09()
+        {
+            db.Log = Console.Out;
+            Console.WriteLine("-----------------");
+            IEnumerable<AccessTab> data1 = db.ExecuteQuery<AccessTab>("select * from AccessTab where strTabName = {0}", "Отчеты");
+            foreach (var item in data1)
+            {
+                Console.WriteLine(item.intTabId);
+            }
+        }
+
     }
 }
