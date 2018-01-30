@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\AccessTab.cs" />
+    <Compile Include="Model\AccessUser.cs" />
     <Compile Include="Model\MCSModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

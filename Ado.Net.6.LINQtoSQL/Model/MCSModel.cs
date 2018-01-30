@@ -11,8 +11,11 @@ namespace Ado.Net._6.LINQtoSQL.Model
     {
         public MCSModel(): base("Data Source = 192.168.111.107; Initial Catalog=MCS; User ID = sa; Password = Mc123456;")
         {
-
+           
         }
+        public Table<AccessTab> AccessTab { get; set; }
+
+
 
     }
 }
