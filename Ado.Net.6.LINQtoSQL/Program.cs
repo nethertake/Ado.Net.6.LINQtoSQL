@@ -17,7 +17,9 @@ namespace Ado.Net._6.LINQtoSQL
 
         static void Main(string[] args)
         {
-            Exmpl03();
+            Exmpl05(db);
+    
+
         }
 
         static void Exmpl01()
@@ -55,17 +57,50 @@ namespace Ado.Net._6.LINQtoSQL
             var query = from u in users
                         where u.intUserId == 1
                         select
-from t in u.AccessTabs
-//anonim method
-                        select new { u.intUserId, t.StrTabName };
+                 from t in u.AccessTabs
+                     //anonim method
+                 select new { u.intUserId, t.StrTabName };
             foreach (var item in query)
             {
-                foreach(var item2 in item)
+                foreach (var item2 in item)
                 {
                     Console.WriteLine(item2.intUserId + " - " + item2.StrTabName);
                 }
             }
+            Console.WriteLine("------------------------------");
+            db.Log = Console.Out;
+            Console.WriteLine("------------------------------");
 
+            MetaModel mm = db.Mapping;
+
+
+
+            foreach (var user in users)
+            {
+                //пересылка данных туда и обратно
+                foreach (var tab in user.AccessTabs)
+                {
+                    Console.WriteLine(user.intUserId + " - " + tab.StrTabName);
+                }
+            }
+
+        }
+
+        static void Exmpl04()
+        {
+            Console.WriteLine("connection: {0}", db.Connection);
+            Console.WriteLine("connection: {0}", db.Connection.ConnectionString);
+            Console.WriteLine("connection: {0}", db.Connection.ConnectionTimeout);
+            Console.WriteLine("connection: {0}", db.Connection.Database);
+            Console.WriteLine("connection: {0}", db.Connection.DataSource);
+        }
+
+        static void Exmpl05(MCSModel dataContext)
+        {
+            Table<AccessTab> tabs = dataContext.GetTable<AccessTab>();
+            Table<AccessUser> users = dataContext.GetTable<AccessUser>();
+            db.Refresh(RefreshMode.OverwriteCurrentValues);
+            AccessTab a = tabs.OrderBy(o => o.StrTabName).First(f => f.intTabId == 56);
         }
     }
 }
