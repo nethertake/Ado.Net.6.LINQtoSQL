@@ -17,8 +17,9 @@ namespace Ado.Net._6.LINQtoSQL
 
         static void Main(string[] args)
         {
-            Exmpl05(db);
-    
+            Exmpl08();
+
+
 
         }
 
@@ -101,6 +102,40 @@ namespace Ado.Net._6.LINQtoSQL
             Table<AccessUser> users = dataContext.GetTable<AccessUser>();
             db.Refresh(RefreshMode.OverwriteCurrentValues);
             AccessTab a = tabs.OrderBy(o => o.StrTabName).First(f => f.intTabId == 56);
+        }
+
+
+        static void Exmpl08()
+        {
+            Table<AccessTab> accessTabs = db.GetTable<AccessTab>();
+            AccessTab aTab = accessTabs.FirstOrDefault(f => f.intTabId == 1);
+            aTab.StrDescription = "Test 005";
+
+            Table<AccessUser> accessUsers = db.GetTable<AccessUser>();
+            AccessUser aUser = accessUsers.FirstOrDefault(f => f.intAccessId == 6822);
+            aUser.dCreated = DateTime.Now;
+            aUser.intTabId = 108;
+
+            try
+            {
+                using (System.Transactions.TransactionScope scope = new System.Transactions.TransactionScope())
+                {
+                    db.SubmitChanges();
+                    scope.Complete();
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                db.Refresh(RefreshMode.OverwriteCurrentValues, accessTabs);
+                Console.WriteLine("StrDescription: {0}", aTab.StrDescription);
+
+                db.Refresh(RefreshMode.OverwriteCurrentValues, accessUsers);
+                Console.WriteLine("dCreated: {0}", aUser.dCreated);
+            }
         }
     }
 }
